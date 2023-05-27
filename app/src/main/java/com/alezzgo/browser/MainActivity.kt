@@ -3,16 +3,20 @@ package com.alezzgo.browser
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.alezzgo.browser.ui.theme.BrowserTheme
 
 class MainActivity : ComponentActivity() {
+
+    val vm by viewModels<BrowserViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,7 +26,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    BrowserScreen(viewModel = BrowserViewModel())
+                    val state = vm.state.collectAsState()
+                    BrowserScreen(state.value,vm::onEvent)
                 }
             }
         }
@@ -33,6 +38,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     BrowserTheme {
-        BrowserScreen(viewModel = BrowserViewModel())
+
     }
 }
